@@ -8,8 +8,6 @@ import datetime
 import pywifi
 from pywifi import const
 
-# generate random passwords
-
 def GeneratePassword():
 
     today = datetime.datetime.now().strftime('%d-%m-%Y')
@@ -32,14 +30,14 @@ def GeneratePassword():
 
 
 # Email the password to the admin
-def send_password_via_email(genPass):
+def send_password_via_email(genPassAndTime):
     gmail_user = 'giftnakembetwa@gmail.com'  
     gmail_password = 'n8181818'
 
     sent_from = gmail_user  
     to = ['mcrider45g@gmail.com', 'dykedvd@gmail.com']  
     subject = 'NEW WIFI PASSWORD'  
-    body = 'The new WIFI password is:\n %s => %s' % (genPass[0], genPass[1],)
+    body = 'The new WIFI password is:\n %s => %s' % (genPassAndTime[0], genPassAndTime[1],)
 
     email_text = 'From: %s \nTo: %s\nSubject: %s\n\n %s' % (sent_from, ", ".join(to), subject, body)
 
@@ -54,7 +52,7 @@ def send_password_via_email(genPass):
     except:  
         print('Something went wrong...')
 
-def connect_to_WIFI_connection_new_pass(genpass):
+def connect_to_WIFI_connection_new_pass(NewPassword):
     wifi = pywifi.PyWiFi()
 
     iface = wifi.interfaces()[0]
@@ -69,7 +67,7 @@ def connect_to_WIFI_connection_new_pass(genpass):
     profile.auth = const.AUTH_ALG_OPEN
     profile.akm.append(const.AKM_TYPE_WPA2PSK)
     profile.cipher = const.CIPHER_TYPE_CCMP
-    profile.key = genpass
+    profile.key = NewPassword
 
     iface.remove_all_network_profiles()
     tmp_profile = iface.add_network_profile(profile)
@@ -79,13 +77,11 @@ def connect_to_WIFI_connection_new_pass(genpass):
 
 if __name__ == "__main__":
     
-    NewPassword = GeneratePassword()
-    send_password_via_email(NewPassword)
+    NewPasswordAndTime = GeneratePassword()
+    send_password_via_email(NewPasswordAndTime)
 
-
-    # Using Chrome to access web
     driver = webdriver.Chrome()
-    # Open the website
+
     driver.get('http://192.168.1.1')
 
     user_box = driver.find_element_by_name('router_username')
@@ -99,7 +95,6 @@ if __name__ == "__main__":
 
     time.sleep(2)
 
-    # Click login
     login_button = driver.find_element_by_id('btnSignIn')
     login_button.click()
 
@@ -120,12 +115,12 @@ if __name__ == "__main__":
     WIFI_pass_box = driver.find_element_by_id('txtPasswd_0')
     WIFI_pass_box.clear()
     time.sleep(1)
-    WIFI_pass_box.send_keys(NewPassword[0])
+    WIFI_pass_box.send_keys(NewPasswordAndTime[0])
     time.sleep(2)
 
     save_pass_button = driver.find_element_by_css_selector('.ssids #lt_btnApply')
     save_pass_button.click()
 
     time.sleep(5)
-    connect_to_WIFI_connection_new_pass(NewPassword[0])
+    connect_to_WIFI_connection_new_pass(NewPasswordAndTime[0])
 
