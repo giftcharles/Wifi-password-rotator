@@ -94,6 +94,7 @@ if __name__ == "__main__":
     time.sleep(2)
 
     user_box.send_keys('admin')
+    time.sleep(1)
     pass_box.send_keys('admin')
 
     time.sleep(2)
