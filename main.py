@@ -7,11 +7,53 @@ import codecs
 import datetime
 import pywifi
 from pywifi import const
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
+EXTRA_EMAILS = ['giftnakembetwa@gmail.com', 'mcrider45g@gmail.com']
+REGISTRY = "T.H Registry"
+_PASSWORD_PREFIX = "Normet2019-"
+_GMAIL_USER = 'giftnakembetwa@gmail.com'
+SSID = 'Travellers home'
+WaitAfterEmail = 300
+CARRIER = 'TTCL'
+
+def get_checked_in_customer_emails():
+    scope = ['https://spreadsheets.google.com/feeds',
+            'https://www.googleapis.com/auth/drive']
+
+    credentials = ServiceAccountCredentials.from_json_keyfile_name('Registry-f2600ffbcc35.json', scope)
+
+    gc = gspread.authorize(credentials)
+
+    wks = gc.open(REGISTRY).sheet1
+
+    list_of_regestries = wks.get_all_values()
+
+    i=0
+    customers = list()
+    email_list = list()
+    for row in list_of_regestries:
+        if i > 3:
+            customers.append(row)    
+        i+=1
+
+    for customer in customers:
+        if customer[2] == '':
+            if customer[5] != '':
+                email_list.append(customer[5])
+
+    email_list += EXTRA_EMAILS
+
+    print(email_list)
+
+    return email_list
+
+
 
 def GeneratePassword():
 
     today = datetime.datetime.now().strftime('%d-%m-%Y')
-    prefix = "Normet2019-"
 
     letters = list('abcdefghijklmnopqrstuvwxyz')
 
@@ -19,11 +61,11 @@ def GeneratePassword():
 
     randomLetter = random.choice(letters)
 
-    randomPass = prefix + randomLetter + str(number)
+    randomPass = _PASSWORD_PREFIX + randomLetter + str(number)
 
     print(randomPass)
 
-    with codecs.open('logs.txt', 'a', 'utf-8') as f:
+    with codecs.open('logs.log', 'a', 'utf-8') as f:
         f.write(today + " => " + randomPass + "\n")
 
     return [randomPass, today]
@@ -31,13 +73,13 @@ def GeneratePassword():
 
 # Email the password to the admin
 def send_password_via_email(genPassAndTime):
-    gmail_user = 'giftnakembetwa@gmail.com'  
+    gmail_user = _GMAIL_USER  
     gmail_password = 'n8181818'
 
     sent_from = gmail_user  
-    to = ['mcrider45g@gmail.com', 'dykedvd@gmail.com']  
-    subject = 'NEW WIFI PASSWORD'  
-    body = 'The new WIFI password is:\n %s => %s' % (genPassAndTime[0], genPassAndTime[1],)
+    to = get_checked_in_customer_emails()  
+    subject = '(Kifumbu) NEW WIFI PASSWORD'  
+    body = 'The new WIFI password is:\n %s' % (genPassAndTime[1],)
 
     email_text = 'From: %s \nTo: %s\nSubject: %s\n\n %s' % (sent_from, ", ".join(to), subject, body)
 
@@ -59,11 +101,14 @@ def connect_to_WIFI_connection_new_pass(NewPassword):
 
     iface.disconnect()
     time.sleep(1)
-    assert iface.status() in\
-        [const.IFACE_DISCONNECTED, const.IFACE_INACTIVE]
+    try:
+        assert iface.status() in\
+            [const.IFACE_DISCONNECTED, const.IFACE_INACTIVE]
+    except:
+        pass
 
     profile = pywifi.Profile()
-    profile.ssid = 'Travellers home'
+    profile.ssid = SSID
     profile.auth = const.AUTH_ALG_OPEN
     profile.akm.append(const.AKM_TYPE_WPA2PSK)
     profile.cipher = const.CIPHER_TYPE_CCMP
@@ -73,12 +118,17 @@ def connect_to_WIFI_connection_new_pass(NewPassword):
     tmp_profile = iface.add_network_profile(profile)
 
     iface.connect(tmp_profile)
-    assert iface.status() == const.IFACE_CONNECTED
+    try:
+        assert iface.status() == const.IFACE_CONNECTED
+    except:
+        pass
 
-if __name__ == "__main__":
+def TTCL_HostNav():
     
     NewPasswordAndTime = GeneratePassword()
+
     send_password_via_email(NewPasswordAndTime)
+    time.sleep(WaitAfterEmail)
 
     driver = webdriver.Chrome()
 
@@ -91,7 +141,7 @@ if __name__ == "__main__":
 
     user_box.send_keys('admin')
     time.sleep(1)
-    pass_box.send_keys('admin')
+    pass_box.send_keys('Normet')
 
     time.sleep(2)
 
@@ -123,4 +173,3 @@ if __name__ == "__main__":
 
     time.sleep(5)
     connect_to_WIFI_connection_new_pass(NewPasswordAndTime[0])
-
