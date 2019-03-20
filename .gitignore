@@ -6,3 +6,5 @@ debug.log
 logs.log
 profile_settings.pkl
 Registry-f2600ffbcc35.json
+.gitignore
+/.vscode
