@@ -9,6 +9,8 @@ import pywifi
 from pywifi import const
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import _pickle as cPickle
+
 
 EXTRA_EMAILS = ['giftnakembetwa@gmail.com', 'mcrider45g@gmail.com']
 REGISTRY = "T.H Registry"
@@ -16,14 +18,46 @@ _PASSWORD_PREFIX = "Normet2019-"
 _GMAIL_USER = 'giftnakembetwa@gmail.com'
 _GMAIL_USER_PASS = 'n8181818'
 SSID = 'Travellers home'
-WaitAfterEmail = 300
+WaitAfterEmail = 400
 CARRIER = 'TTCL'
+HOST_ADDRESS = 'http://192.168.1.1'
+HOST_USERNAME = 'admin'
+HOST_PASSWORD = 'Normet'
+SERVICE_ACCOUNT_CREDENTIALS = 'Registry-f2600ffbcc35.json'
+
+def pickle_data():
+    PIK = 'Profile_settings.pkl'
+
+    config = [
+        {"EXTRA_EMAILS": EXTRA_EMAILS},
+        {"REGISTRY": REGISTRY},
+        {"_PASSWORD_PREFIX": _PASSWORD_PREFIX},
+        {"_GMAIL_USER": _GMAIL_USER},
+        {"_GMAIL_USER_PASS": _GMAIL_USER_PASS},
+        {"SSID": SSID},
+        {"WaitAfterEmail": WaitAfterEmail},
+        {"CARRIER": CARRIER},
+        {"HOST_ADDRESS": HOST_ADDRESS},
+        {"HOST_USERNAME": HOST_USERNAME},
+        {"HOST_PASSWORD": HOST_PASSWORD},
+        {"SERVICE_ACCOUNT_CREDENTIALS": SERVICE_ACCOUNT_CREDENTIALS},
+        {"HourMinute": "11:00", "DayNight": "AM"}
+    ]
+
+    with open(PIK, "wb") as f:
+        cPickle.dump(config, f)
+
+    with open(PIK, "rb") as f:
+        config = cPickle.load(f)
+    
+    print(len(config))
+pickle_data()
 
 def get_checked_in_customer_emails():
     scope = ['https://spreadsheets.google.com/feeds',
             'https://www.googleapis.com/auth/drive']
 
-    credentials = ServiceAccountCredentials.from_json_keyfile_name('Registry-f2600ffbcc35.json', scope)
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(SERVICE_ACCOUNT_CREDENTIALS, scope)
 
     gc = gspread.authorize(credentials)
 
@@ -133,16 +167,16 @@ def TTCL_HostNav():
 
     driver = webdriver.Chrome()
 
-    driver.get('http://192.168.1.1')
+    driver.get(HOST_ADDRESS)
 
     user_box = driver.find_element_by_name('router_username')
     pass_box = driver.find_element_by_id('tbarouter_password')
 
     time.sleep(2)
 
-    user_box.send_keys('admin')
+    user_box.send_keys(HOST_USERNAME)
     time.sleep(1)
-    pass_box.send_keys('Normet')
+    pass_box.send_keys(HOST_PASSWORD)
 
     time.sleep(2)
 
