@@ -14,6 +14,7 @@ EXTRA_EMAILS = ['giftnakembetwa@gmail.com', 'mcrider45g@gmail.com']
 REGISTRY = "T.H Registry"
 _PASSWORD_PREFIX = "Normet2019-"
 _GMAIL_USER = 'giftnakembetwa@gmail.com'
+_GMAIL_USER_PASS = 'n8181818'
 SSID = 'Travellers home'
 WaitAfterEmail = 300
 CARRIER = 'TTCL'
@@ -74,7 +75,7 @@ def GeneratePassword():
 # Email the password to the admin
 def send_password_via_email(genPassAndTime):
     gmail_user = _GMAIL_USER  
-    gmail_password = 'n8181818'
+    gmail_password = _GMAIL_USER_PASS
 
     sent_from = gmail_user  
     to = get_checked_in_customer_emails()  
