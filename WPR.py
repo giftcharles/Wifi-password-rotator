@@ -250,7 +250,7 @@ def __connect_to_WIFI_connection_new_pass(NewPassword):
         LOGGER.debug('assert iface.status() failed')
 
 def __log_todays_date():
-    
+
     today = datetime.datetime.now().strftime('%d-%m-%Y')
 
     try:
