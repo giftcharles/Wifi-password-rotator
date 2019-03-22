@@ -387,7 +387,7 @@ def TTCL_HostNav():
     except Exception as e:
         LOGGER.debug('could not apply the new password')
         LOGGER.debug(e)
-        LOGGER.debug('emailing guests in 5...')
+        LOGGER.debug('emailing guests about the issue in 5...')
         time.sleep(5)
         __Email_guests_password_didnt_change(emails, NewPasswordAndTime[0])
         return
