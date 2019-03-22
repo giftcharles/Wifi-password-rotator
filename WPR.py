@@ -249,7 +249,6 @@ def __connect_to_WIFI_connection_new_pass(NewPassword):
         assert iface.status() == const.IFACE_CONNECTED
     except Exception as e:
         LOGGER.debug('assert iface.status() failed')
-        LOGGER.debug(e)
 
 def __log_todays_date():
     
