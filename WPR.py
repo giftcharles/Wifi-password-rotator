@@ -340,13 +340,8 @@ def TTCL_HostNav():
     options.headless = True
 
     driver = webdriver.Chrome(chrome_options=options)
-
-    try:
-        driver.get(HOST_ADDRESS)
-    except Exception as e:
-        LOGGER.debug('could not connect to the host')
-        LOGGER.debug(e)        
-        raise
+    
+    driver.get(HOST_ADDRESS)
 
     user_box = driver.find_element_by_name('router_username')
     pass_box = driver.find_element_by_id('tbarouter_password')
