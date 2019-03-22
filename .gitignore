@@ -19,3 +19,4 @@ python36.dll
 *.json
 *.pkl
 *.log
+.vscode/settings.json
