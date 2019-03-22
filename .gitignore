@@ -3,6 +3,7 @@
 .gitignore
 /.vscode
 Last Change Date.Dat
+/__pycache__
 
 /notes
 /executable
@@ -18,5 +19,6 @@ python36.dll
 *.exe
 *.json
 *.pkl
+*.Dat
 *.log
 .vscode/settings.json
