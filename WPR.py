@@ -285,7 +285,7 @@ def __has_changed_today():
     openFile.close()
 
     if saveDate == today:
-        LOGGER.debug('The save date is today')
+        LOGGER.debug('The save date is today, cancelling...')
         return True
 
     elif saveDate != today:
