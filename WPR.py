@@ -41,8 +41,10 @@ def __setVariables():
     global DAY_NIGHT
     global LOGGER
     global timeToClose 
+    global environment
 
     timeToClose = 60
+    environment = 'development'
 
     # file logging configurations
     LOG_FILENAME = './log/logs.log'
@@ -189,8 +191,8 @@ def send_password_via_email(genPassAndTime):
 def __Email_guests_password_didnt_change(emailsList, FailedPassword):
     sent_from = _GMAIL_USER  
     to = emailsList  
-    subject = '(Kifumbu) PASSWORD WAS NOT CHANGED'  
-    body = 'The new password %s will not be in use due to a technical error, Keep using the last password' % (FailedPassword,)
+    subject = '(Kifumbu)[ERROR] PASSWORD WAS NOT CHANGED'  
+    body = 'The password %s from the last email, will not be in use due to a technical error, Keep using the last password unless we notify you otherwise.\n\n Sorry for any inconviniences' % (FailedPassword,)
 
     email_text = 'From: %s \nTo: %s\nSubject: %s\n\n %s' % (sent_from, ", ".join(to), subject, body)
 
@@ -251,6 +253,10 @@ def __connect_to_WIFI_connection_new_pass(NewPassword):
 
 def __log_todays_date():
 
+    if environment == 'development':
+        LOGGER.debug('no need to log the day in development mode')
+        return False
+    
     today = datetime.datetime.now().strftime('%d-%m-%Y')
 
     try:
@@ -465,9 +471,10 @@ def run():
         
         systray.update(hover_text="This Carrier is not supported yet!", icon="icon-yellow.ico")
 
-    for i in range(timeToClose):
-        systray.update(hover_text="Failed the run, exiting in %s seconds" % (timeToClose - (i+1),))
-        time.sleep(1)
+        for i in range(timeToClose):
+            systray.update(hover_text="Failed the run, exiting in %s seconds" % (timeToClose - (i+1),))
+            time.sleep(1)
+    
     systray.shutdown()
 
     LOGGER.debug('System tray icon shutdown')
