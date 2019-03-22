@@ -14,6 +14,11 @@ Last Change Date.Dat
 WPR.spec
 python36.dll
 
+credentials.json
+chromedriver.exe
+Registry-f2600ffbcc35.json
+token.pickle
+
 *.png
 *.ico
 *.exe
