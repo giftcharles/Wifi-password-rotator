@@ -334,7 +334,7 @@ def TTCL_HostNav():
     NewPasswordAndTime = __GeneratePassword()
 
     emails = send_password_via_email(NewPasswordAndTime)
-    print('wait for like %s seconds, thanks!' % (WaitAfterEmail,)) 
+    LOGGER.debug('waiting for like %s seconds for Emails to be delivered' % (WaitAfterEmail,))
     time.sleep(WaitAfterEmail)
 
     options = Options()
