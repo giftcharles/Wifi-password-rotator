@@ -21,4 +21,5 @@ python36.dll
 *.pkl
 *.Dat
 *.log
+*.pickle
 .vscode/settings.json
