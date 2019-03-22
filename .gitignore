@@ -1,21 +1,21 @@
 /GUI
 
-chromedriver.exe
-credentials.json
-debug.log
-logs.log
-profile_settings.pkl
-Registry-f2600ffbcc35.json
 .gitignore
 /.vscode
 Last Change Date.Dat
 
 /notes
-/executables
+/executable
 /executablesx86
 
 /build
 /dist
-main.spec
-lib
+WPR.spec
 python36.dll
+
+*.png
+*.ico
+*.exe
+*.json
+*.pkl
+*.log
