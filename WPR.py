@@ -390,6 +390,7 @@ def TTCL_HostNav():
         LOGGER.debug('emailing guests in 5...')
         time.sleep(5)
         __Email_guests_password_didnt_change(emails, NewPasswordAndTime[0])
+        return
 
     time.sleep(5)
 
