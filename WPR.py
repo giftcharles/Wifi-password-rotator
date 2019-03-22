@@ -416,10 +416,6 @@ def __open_settings(systray):
         LOGGER.debug('could not open "settings.exe"')
         LOGGER.debug(e)
 
-def __on_quit_callback(systray):
-    LOGGER.debug('System tray icon shutdown')
-    __end_log_runtime()
-
 def state_manage_trayIcon(systrayObj, navFunction):
     try:
         systrayObj.update(hover_text="Running... WPR", icon="icon-green.ico")
