@@ -8,3 +8,14 @@ profile_settings.pkl
 Registry-f2600ffbcc35.json
 .gitignore
 /.vscode
+Last Change Date.Dat
+
+/notes
+/executables
+/executablesx86
+
+/build
+/dist
+main.spec
+lib
+python36.dll
