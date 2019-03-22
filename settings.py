@@ -324,7 +324,7 @@ class MyFrame(wx.Frame):
         # self.os.system("main.exe")
         startupinfo = self.subprocess.STARTUPINFO()
         startupinfo.dwFlags |= self.subprocess.STARTF_USESHOWWINDOW
-        self.subprocess.Popen("main.exe", startupinfo=startupinfo)
+        self.subprocess.Popen("WPR.exe", startupinfo=startupinfo)
 
 
     def shutdownTrayIcon(self, event):  # wxGlade: MyFrame.<event_handler>
