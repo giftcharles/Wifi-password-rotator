@@ -230,9 +230,8 @@ def __connect_to_WIFI_connection_new_pass(NewPassword):
     try:
         assert iface.status() in\
             [const.IFACE_DISCONNECTED, const.IFACE_INACTIVE]
-    except:
+    except Exception as e:
         LOGGER.debug('assert iface.status() failed')
-        LOGGER.debug(e)
 
     profile = pywifi.Profile()
     profile.ssid = SSID
@@ -432,7 +431,6 @@ def state_manage_trayIcon(systrayObj, navFunction):
         for i in range(timeToClose):
             systrayObj.update(hover_text="Failed the run, exiting in %s seconds" % (timeToClose - (i+1),))
             time.sleep(1)
-        systrayObj.shutdown()
 
 def __end_log_runtime():
     LOGGER.debug('#### %s: WPR LOGS END' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),) )
@@ -459,7 +457,7 @@ def run():
         return
 
     menu_options = (("Settings", None, __open_settings),)
-    systray = SysTrayIcon("icon-normal.ico", "Wifi password rotater", menu_options, on_quit=__on_quit_callback)
+    systray = SysTrayIcon("icon-normal.ico", "Wifi password rotater", menu_options)
     systray.start()
     LOGGER.debug('System tray icon has been started')
 
@@ -471,10 +469,14 @@ def run():
         LOGGER.debug('carrier is not supported, exiting')
         
         systray.update(hover_text="This Carrier is not supported yet!", icon="icon-yellow.ico")
-        for i in range(timeToClose):
-            systray.update(hover_text="Failed the run, exiting in %s seconds" % (timeToClose - (i+1),))
-            time.sleep(1)
-        systray.shutdown()
+
+    for i in range(timeToClose):
+        systray.update(hover_text="Failed the run, exiting in %s seconds" % (timeToClose - (i+1),))
+        time.sleep(1)
+    systray.shutdown()
+
+    LOGGER.debug('System tray icon shutdown')
+    __end_log_runtime()
     
 if __name__ == "__main__":
     #__setVariables()
