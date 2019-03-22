@@ -421,10 +421,10 @@ def state_manage_trayIcon(systrayObj, navFunction):
         systrayObj.update(hover_text="Running... WPR", icon="icon-green.ico")
         navFunction()
         systrayObj.update(icon="icon-normal.ico")
+        LOGGER.debug('waiting for %s seconds before closing...' % (timeToClose,))
         for i in range(timeToClose):
-            systrayObj.update(hover_text="Completed the run, shutting down in %s seconds" % (timeToClose - (i+1),))
+            systrayObj.update(hover_text="Completed the run, exiting in %s seconds" % (timeToClose - (i+1),))
             time.sleep(1)
-        systrayObj.shutdown()
     except Exception as err:
         systrayObj.update(hover_text="Failed to run", icon="icon-yellow.ico")
         LOGGER.debug(err)
