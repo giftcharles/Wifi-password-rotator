@@ -382,7 +382,6 @@ def TTCL_HostNav():
         save_pass_button = driver.find_element_by_css_selector('.ssids #lt_btnApply')
         save_pass_button.click()
         LOGGER.debug('Apply button has been clicked and password has been saved')
-        LOGGER.debug('Marking today\'s date as Password already changed')
         __log_todays_date()
 
     except Exception as e:
