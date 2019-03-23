@@ -155,7 +155,7 @@ def __GeneratePassword():
 
     randomPass = _PASSWORD_PREFIX + randomLetter + str(number)
 
-    LOGGER.debug("randomly generated password => %s on => %s" % (randomPass,today,))
+    LOGGER.debug("randomly generated password => %s" % (randomPass,))
 
     return [randomPass, today]
 
