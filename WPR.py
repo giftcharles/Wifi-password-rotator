@@ -82,10 +82,11 @@ def __setVariables():
         LOGGER.debug('Unpickled profile settings file and loaded to pickleData')
         LOGGER.debug(pickleData)
     except Exception as e:
-        pickleData = list()
-
         LOGGER.debug('something went wrong! could not unpickle')
+        LOGGER.debug('Exiting out of the run immidiately!')
         LOGGER.debug(e)
+        raise SystemExit
+
 
     if pickleData != []:
         EXTRA_EMAILS = pickleData[0]['EXTRA_EMAILS']
