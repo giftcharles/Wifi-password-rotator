@@ -42,6 +42,7 @@ def __setVariables():
     global LOGGER
     global timeToClose 
     global environment
+    global specifiedTimeToRunAfter
 
     environment = 'production'
 
@@ -101,6 +102,7 @@ def __setVariables():
         SERVICE_ACCOUNT_CREDENTIALS = pickleData[11]['SERVICE_ACCOUNT_CREDENTIALS']
         HOUR_MINUTE = pickleData[12]['HourMinute']
         DAY_NIGHT = pickleData[12]['DayNight']
+        specifiedTimeToRunAfter = pickleData[13]['_USE_RUN_AFTER_BOOLEAN']
 
         LOGGER.debug('Global variables have been set')
 
@@ -262,6 +264,10 @@ def __log_todays_date():
     if environment == 'development':
         LOGGER.debug('no need to log the day in development mode')
         return False
+
+    if specifiedTimeToRunAfter == False:
+        LOGGER.debug('We are not runnnig the software after a specified time')
+        return False
     
     today = datetime.datetime.now().strftime('%d-%m-%Y')
 
@@ -315,7 +321,7 @@ def __is_in_hour_minute():
         return True
     else:
         LOGGER.debug('Its before the specified time, return false')
-        return False
+        return True
 
 
 def __internet_connection():
