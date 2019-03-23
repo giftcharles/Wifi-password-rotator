@@ -43,8 +43,12 @@ def __setVariables():
     global timeToClose 
     global environment
 
-    timeToClose = 10
-    environment = 'development'
+    environment = 'production'
+
+    if environment == 'production':
+        timeToClose = 60
+    elif environment == 'development':
+        timeToClose = 10
 
     # file logging configurations
     LOG_FILENAME = './log/logs.log'

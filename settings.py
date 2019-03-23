@@ -69,7 +69,8 @@ class MyFrame(wx.Frame):
                 {"HOST_USERNAME": 'admin'},
                 {"HOST_PASSWORD": ''},
                 {"SERVICE_ACCOUNT_CREDENTIALS": ''},
-                {"HourMinute": "00:00", "DayNight": "AM"}
+                {"HourMinute": "00:00", "DayNight": "AM"},
+                {"_USE_RUN_AFTER_BOOLEAN": False}
             ]
             
         self.carrierIndexInList = self.Carriers.index(current_config[7]['CARRIER'])
@@ -85,6 +86,7 @@ class MyFrame(wx.Frame):
         self.SheetName = current_config[1]['REGISTRY']
         self.seviceAccountCreds = current_config[11]['SERVICE_ACCOUNT_CREDENTIALS']
         self.defaultEmailList = current_config[0]['EXTRA_EMAILS']
+        self.use_run_bool = current_config[13]['_USE_RUN_AFTER_BOOLEAN']
 
         # begin wxGlade: MyFrame.__init__
         kwds["style"] = kwds.get("style", 0) | wx.CAPTION | wx.CLIP_CHILDREN | wx.CLOSE_BOX | wx.MINIMIZE_BOX | wx.RESIZE_BORDER | wx.SYSTEM_MENU
@@ -126,6 +128,7 @@ class MyFrame(wx.Frame):
         self.notebook_1_pane_2 = wx.Panel(self.notebook_1, wx.ID_ANY)
         self.radio_box_1 = wx.RadioBox(self.notebook_1_pane_2, wx.ID_ANY, "Carrier", choices=self.Carriers, majorDimension=1, style=wx.RA_SPECIFY_ROWS)
         self.slider_1 = wx.Slider(self.notebook_1_pane_2, wx.ID_ANY, self.WaitAfterEmail, 0, 720, style=wx.SL_HORIZONTAL | wx.SL_LABELS | wx.SL_SELRANGE)
+        self.checkbox_1 = wx.CheckBox(self.notebook_1_pane_2, wx.ID_ANY, "Use \"Run only After\". If you use this, the program only runs after the specified time.")        
         self.choice_1 = wx.Choice(self.notebook_1_pane_2, wx.ID_ANY, choices=self.HourMinutesList)
         self.choice_2 = wx.Choice(self.notebook_1_pane_2, wx.ID_ANY, choices=self.DayNightList)
         self.ntoebook_1_pane_3 = wx.Panel(self.notebook_1, wx.ID_ANY)
@@ -152,6 +155,7 @@ class MyFrame(wx.Frame):
         self.Bind(wx.EVT_TOOL, self.RunTrayIcon, id=1324)
         self.Bind(wx.EVT_TOOL, self.shutdownTrayIcon, id=7685)
         self.Bind(wx.EVT_TOOL, self.onAboutShow, id=wx.ID_ABOUT)
+        self.Bind(wx.EVT_CHECKBOX, self.disable_runtime, self.checkbox_1)
         self.Bind(wx.EVT_BUTTON, self.OnSaveButton, self.button_1)
         self.Bind(wx.EVT_BUTTON, self.OnCancelButton, self.button_2)
         # end wxGlade
@@ -184,6 +188,9 @@ class MyFrame(wx.Frame):
         self.text_ctrl_5.write(self.SenderEmailAddress)
         self.text_ctrl_7.write(self.SenderEmailAccountPassword)
         self.text_ctrl_2.LoadFile('./log/logs.log')
+        self.checkbox_1.SetValue(self.use_run_bool)
+        self.choice_1.Enable(self.use_run_bool)
+        self.choice_2.Enable(self.use_run_bool)
         
         for email in self.defaultEmailList:
             self.text_ctrl_1.write(email + '\n')
@@ -210,7 +217,8 @@ class MyFrame(wx.Frame):
         sizer_2.Add(self.slider_1, 0, wx.EXPAND | wx.LEFT | wx.RIGHT, 12)
         static_line_1 = wx.StaticLine(self.notebook_1_pane_2, wx.ID_ANY)
         sizer_2.Add(static_line_1, 0, wx.BOTTOM | wx.EXPAND | wx.TOP, 12)
-        label_1 = wx.StaticText(self.notebook_1_pane_2, wx.ID_ANY, "Run time: ")
+        sizer_2.Add(self.checkbox_1, 0, wx.LEFT | wx.RIGHT, 12)
+        label_1 = wx.StaticText(self.notebook_1_pane_2, wx.ID_ANY)
         sizer_4.Add(label_1, 0, wx.RIGHT | wx.TOP, 4)
         sizer_4.Add(self.choice_1, 0, 0, 0)
         sizer_4.Add(self.choice_2, 0, 0, 0)
@@ -304,6 +312,7 @@ class MyFrame(wx.Frame):
         newConfig.append( {'SERVICE_ACCOUNT_CREDENTIALS': self.text_ctrl_3.GetLineText(0)} )
         newConfig.append( {'HourMinute': self.HourMinutesList[self.choice_1.GetSelection()], 
                             'DayNight' : self.DayNightList[self.choice_2.GetSelection()] } )
+        newConfig.append( {'_USE_RUN_AFTER_BOOLEAN': self.checkbox_1.GetValue()} )
         
         with open(self.thePickledObjectsFile, "wb") as f:
             self.cPickle.dump(newConfig, f)
@@ -326,6 +335,11 @@ class MyFrame(wx.Frame):
         startupinfo.dwFlags |= self.subprocess.STARTF_USESHOWWINDOW
         self.subprocess.Popen("WPR.exe", startupinfo=startupinfo)
 
+    def disable_runtime(self, event):  # wxGlade: MyFrame.<event_handler>
+        CheckboxState = self.checkbox_1.IsChecked()
+        self.choice_1.Enable(CheckboxState)
+        self.choice_2.Enable(CheckboxState)
+        
 
     def shutdownTrayIcon(self, event):  # wxGlade: MyFrame.<event_handler>
         print("Event handler 'shutdownTrayIcon' not implemented!")
