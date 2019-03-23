@@ -1,7 +1,7 @@
 # C:/Users/gift/AppData/Local/Programs/Python/Python36-32x86/python.exe setup.py build
 
 
-import random
+import secrets
 import time
 import smtplib
 import selenium
@@ -43,7 +43,7 @@ def __setVariables():
     global timeToClose 
     global environment
 
-    timeToClose = 60
+    timeToClose = 10
     environment = 'development'
 
     # file logging configurations
@@ -149,9 +149,11 @@ def __GeneratePassword():
 
     letters = list('abcdefghijklmnopqrstuvwxyz')
 
-    number = random.randrange(100,1000)
+    secretObject = secrets.SystemRandom()
 
-    randomLetter = random.choice(letters)
+    number = secretObject.randrange(100,1000)
+
+    randomLetter = secrets.choice(letters)
 
     randomPass = _PASSWORD_PREFIX + randomLetter + str(number)
 
@@ -484,3 +486,4 @@ if __name__ == "__main__":
     #__setVariables()
     #__Connected_to_router()
     run()
+    #__GeneratePassword()
