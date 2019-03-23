@@ -51,28 +51,9 @@ class MyFrame(wx.Frame):
         self.HourMinutesList = ["12:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00"]
         self.DayNightList = ["AM", "PM"]
 
-        try:
-            current_config = self.__load_pickled_data()
-            if current_config == []:
-                raise
-        except:
-            current_config = [
-                {"EXTRA_EMAILS": []},
-                {"REGISTRY": ''},
-                {"_PASSWORD_PREFIX": ''},
-                {"_GMAIL_USER": ''},
-                {"_GMAIL_USER_PASS": ''},
-                {"SSID": ''},
-                {"WaitAfterEmail": 120},
-                {"CARRIER": 'TTCL'},
-                {"HOST_ADDRESS": ''},
-                {"HOST_USERNAME": 'admin'},
-                {"HOST_PASSWORD": ''},
-                {"SERVICE_ACCOUNT_CREDENTIALS": ''},
-                {"HourMinute": "00:00", "DayNight": "AM"},
-                {"_USE_RUN_AFTER_BOOLEAN": False}
-            ]
-            
+
+        current_config = self.__load_pickled_data()
+   
         self.carrierIndexInList = self.Carriers.index(current_config[7]['CARRIER'])
         self.WaitAfterEmail = current_config[6]['WaitAfterEmail']
         self.HourMinuteChoice = self.HourMinutesList.index(current_config[12]['HourMinute'])
@@ -287,7 +268,22 @@ class MyFrame(wx.Frame):
             with open(self.thePickledObjectsFile, "rb") as f: 
                 return self.cPickle.load(f)
         except:
-            return list()
+            return [
+                {"EXTRA_EMAILS": []},
+                {"REGISTRY": ''},
+                {"_PASSWORD_PREFIX": ''},
+                {"_GMAIL_USER": ''},
+                {"_GMAIL_USER_PASS": ''},
+                {"SSID": ''},
+                {"WaitAfterEmail": 120},
+                {"CARRIER": 'TTCL'},
+                {"HOST_ADDRESS": ''},
+                {"HOST_USERNAME": 'admin'},
+                {"HOST_PASSWORD": ''},
+                {"SERVICE_ACCOUNT_CREDENTIALS": ''},
+                {"HourMinute": "12:00", "DayNight": "AM"},
+                {"_USE_RUN_AFTER_BOOLEAN": False}
+            ]
 
     def OnSaveButton(self, event):  # wxGlade: MyFrame.<event_handler>
         newConfig = list()
