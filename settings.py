@@ -316,7 +316,7 @@ class MyFrame(wx.Frame):
         print('the data has been saved')
 
     def OnCancelButton(self, event):  # wxGlade: MyFrame.<event_handler>
-        raise SystemExit
+        self.Close()
 
     def onShowManual(self, event):  # wxGlade: MyFrame.<event_handler>
         print("Event handler 'onShowManual' not implemented!")
