@@ -49,7 +49,7 @@ def __setVariables():
     if environment == 'production':
         timeToClose = 60
     elif environment == 'development':
-        timeToClose = 10
+        timeToClose = 5
 
     # file logging configurations
     LOG_FILENAME = './log/logs.log'
