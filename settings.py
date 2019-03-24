@@ -5,12 +5,34 @@
 #
 
 import wx
+import logging
+import logging.handlers
+import datetime
 
 # begin wxGlade: dependencies
 # end wxGlade
 
 # begin wxGlade: extracode
 # end wxGlade
+
+# file logging configurations
+LOG_FILENAME = './log/logs.log'
+
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
+LOGGER = logging.getLogger("SETTINGS")
+LOGGER.setLevel(logging.DEBUG)
+
+Rotation_handler = logging.handlers.RotatingFileHandler(
+    LOG_FILENAME, maxBytes=(1048576*5), backupCount=7
+)
+
+Rotation_handler.setFormatter(formatter)
+LOGGER.addHandler(Rotation_handler)
+
+consoleHandler = logging.StreamHandler()
+consoleHandler.setFormatter(formatter)
+LOGGER.addHandler(consoleHandler)
 
 class MyDialog(wx.Dialog):
     def __init__(self, *args, **kwds):
@@ -45,6 +67,7 @@ class MyDialog(wx.Dialog):
 
 class MyFrame(wx.Frame):
     def __init__(self, *args, **kwds):
+        LOGGER.debug('#### %s: WPR LOGS START' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),) )
 
         # variables 
         self.Carriers = ["Vodacom", "Airtel", "Zantel", "TTCL", "Tigo", "Halotel"]
@@ -267,7 +290,10 @@ class MyFrame(wx.Frame):
         try:
             with open(self.thePickledObjectsFile, "rb") as f: 
                 return self.cPickle.load(f)
+            LOGGER.debug('Loaded pickled settings configurations from profile_settings.pkl')
+            
         except:
+            LOGGER.debug('Failed to load pickled settings, setting default variables')
             return [
                 {"EXTRA_EMAILS": []},
                 {"REGISTRY": ''},
@@ -312,8 +338,8 @@ class MyFrame(wx.Frame):
         
         with open(self.thePickledObjectsFile, "wb") as f:
             self.cPickle.dump(newConfig, f)
-    
-        print('the data has been saved')
+        
+        LOGGER.debug('the data has been saved')
 
     def OnCancelButton(self, event):  # wxGlade: MyFrame.<event_handler>
         self.Close()
@@ -323,7 +349,9 @@ class MyFrame(wx.Frame):
         event.Skip()
 
     def onAboutShow(self, event):  # wxGlade: MyFrame.<event_handler>
-        a = MyDialog(self, title="Dialog").ShowModal() 
+        a = MyDialog(self, title="Dialog").ShowModal()
+        LOGGER.debug('Opened about Dialogue box')
+
 
     def RunTrayIcon(self, event):  # wxGlade: MyFrame.<event_handler>
         # self.os.system("main.exe")
@@ -335,6 +363,7 @@ class MyFrame(wx.Frame):
         CheckboxState = self.checkbox_1.IsChecked()
         self.choice_1.Enable(CheckboxState)
         self.choice_2.Enable(CheckboxState)
+        LOGGER.debug('enabled/Disabled run script after time option')
         
 
     def shutdownTrayIcon(self, event):  # wxGlade: MyFrame.<event_handler>
@@ -347,6 +376,11 @@ class MyApp(wx.App):
         self.frame = MyFrame(None, wx.ID_ANY, "")
         self.SetTopWindow(self.frame)
         self.frame.Show()
+        return True
+
+    def OnExit(self):
+        LOGGER.debug('closing the application')
+        LOGGER.debug('#### %s: WPR LOGS END' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),) )
         return True
 
 # end of class MyApp
