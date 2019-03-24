@@ -249,7 +249,8 @@ def __connect_to_WIFI_connection_new_pass(NewPassword):
         LOGGER.debug('could not add the profile to the network') 
 
     try:
-        assert iface.status() == const.IFACE_CONNECTED
+        iface.connect(tmp_profile)
+        LOGGER.debug('Connected to the new wifi profile using the new password') 
     except Exception as e:
         LOGGER.debug('assert iface.status() failed')
 
