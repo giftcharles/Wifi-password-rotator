@@ -44,7 +44,7 @@ def __setVariables():
     global environment
     global specifiedTimeToRunAfter
 
-    environment = 'development'
+    environment = 'production'
 
     if environment == 'production':
         timeToClose = 60
@@ -339,7 +339,7 @@ def __internet_connection():
         return True
 
     except Exception as e:
-        LOGGER.debug('Its after the specified time, return true')
+        LOGGER.debug('Its after the specified time, return False')
         LOGGER.debug(e)        
         return False
 
@@ -480,7 +480,7 @@ def run():
         return
 
     menu_options = (("Settings", None, __open_settings),)
-    systray = SysTrayIcon("./assets/images/icon-normal.ico", "Wifi password rotater", menu_options)
+    systray = SysTrayIcon("./assets/images/icon-normal.ico", "Wifi password rotater", menu_options, on_quit=quitSystem)
     systray.start()
     LOGGER.debug('System tray icon has been started')
 
