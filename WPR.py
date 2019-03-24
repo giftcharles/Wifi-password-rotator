@@ -242,8 +242,8 @@ def __connect_to_WIFI_connection_new_pass(NewPassword):
     profile.cipher = const.CIPHER_TYPE_CCMP
     profile.key = NewPassword
 
-    iface.remove_all_network_profiles()
-    tmp_profile = iface.add_network_profile(profile)
+    try:
+        tmp_profile = iface.add_network_profile(profile)
 
     try:
         assert iface.status() == const.IFACE_CONNECTED
