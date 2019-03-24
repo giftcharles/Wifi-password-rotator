@@ -44,7 +44,7 @@ def __setVariables():
     global environment
     global specifiedTimeToRunAfter
 
-    environment = 'production'
+    environment = 'development'
 
     if environment == 'production':
         timeToClose = 60
@@ -252,8 +252,9 @@ def __connect_to_WIFI_connection_new_pass(NewPassword):
         iface.connect(tmp_profile)
         LOGGER.debug('Connected to the new wifi profile using the new password') 
     except Exception as e:
-        LOGGER.debug('assert iface.status() failed')
-
+        LOGGER.debug('could not reconnect the WIFI with the new password')
+        LOGGER.debug(e)
+    
 def __log_todays_date():
 
     if environment == 'development':
@@ -281,9 +282,16 @@ def __log_todays_date():
         return False
 
 def __has_changed_today():
+    import os
     today = datetime.datetime.now().strftime('%d-%m-%Y')
 
-    openFile = open('Last Change Date.dat', 'rb')
+    FILEPATH = './Last Change Date.dat'
+
+    if not os.path.isfile(FILEPATH):
+        f = open(FILEPATH, 'w+')
+        f.close()
+    
+    openFile = open(FILEPATH, 'rb')
 
     LOGGER.debug('Checking the last save date')
 
@@ -483,12 +491,14 @@ def run():
             time.sleep(1)
     
     systray.shutdown()
-
     LOGGER.debug('System tray icon shutdown')
+    
     __end_log_runtime()
     
 if __name__ == "__main__":
     #__setVariables()
     #__Connected_to_router()
-    run()
+    #print(__has_changed_today())
     #__GeneratePassword()
+    run()
+
