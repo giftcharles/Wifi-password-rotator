@@ -360,7 +360,7 @@ def TTCL_HostNav():
     options = Options()
     options.headless = True
 
-    driver = webdriver.Chrome(chrome_options=options)
+    driver = webdriver.Chrome(executable_path='./assets/images/chromedriver.exe',chrome_options=options)
     
     driver.get(HOST_ADDRESS)
 
