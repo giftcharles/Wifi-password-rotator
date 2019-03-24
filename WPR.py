@@ -456,6 +456,8 @@ def state_manage_trayIcon(systrayObj, navFunction):
 def __end_log_runtime():
     LOGGER.debug('#### %s: WPR LOGS END' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),) )
     
+def quitSystem():
+    raise SystemExit
 
 def run():
 
