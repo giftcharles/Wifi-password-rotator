@@ -329,7 +329,7 @@ def __is_in_hour_minute():
         return True
     else:
         LOGGER.debug('Its before the specified time, return false')
-        return True
+        return False
 
 
 def __internet_connection():
