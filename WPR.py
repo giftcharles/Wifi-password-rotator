@@ -235,19 +235,6 @@ def __connect_to_WIFI_connection_new_pass(NewPassword):
 
     iface = wifi.interfaces()[0]
 
-    try:
-        iface.disconnect()
-        LOGGER.debug('disconnected computer from the wifi')
-    except Exception as e:
-        LOGGER.debug('could not disconnect from the wifi connection')
-        LOGGER.debug(e)
-    time.sleep(1)
-    try:
-        assert iface.status() in\
-            [const.IFACE_DISCONNECTED, const.IFACE_INACTIVE]
-    except Exception as e:
-        LOGGER.debug('assert iface.status() failed')
-
     profile = pywifi.Profile()
     profile.ssid = SSID
     profile.auth = const.AUTH_ALG_OPEN
