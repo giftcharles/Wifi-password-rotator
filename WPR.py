@@ -171,6 +171,10 @@ def __GeneratePassword():
 
 # Email the password to the admin
 def send_password_via_email(genPassAndTime):
+
+    if environment == 'development':
+        return []
+
     sent_from = _GMAIL_USER  
     to = __get_checked_in_customer_emails()  
     subject = '(Kifumbu) NEW WIFI PASSWORD'  
