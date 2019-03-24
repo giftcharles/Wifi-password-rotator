@@ -1,0 +1,11 @@
+GUI
+executable
+executablex86
+log
+build 
+__pycache__
+notes
+
+*.dat
+*.json
+*.pkl
