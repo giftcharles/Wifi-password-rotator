@@ -74,7 +74,7 @@ def __setVariables():
 
 
     try:
-        PIK = './Profile_settings.pkl'
+        PIK = './assets/data/Profile_settings.pkl'
 
         with open(PIK, "rb") as f: 
             pickleData =  cPickle.load(f)
@@ -100,7 +100,7 @@ def __setVariables():
         HOST_ADDRESS = pickleData[8]['HOST_ADDRESS']
         HOST_USERNAME = pickleData[9]['HOST_USERNAME']
         HOST_PASSWORD = pickleData[10]['HOST_PASSWORD']
-        SERVICE_ACCOUNT_CREDENTIALS = pickleData[11]['SERVICE_ACCOUNT_CREDENTIALS']
+        SERVICE_ACCOUNT_CREDENTIALS = './assets/data/' + pickleData[11]['SERVICE_ACCOUNT_CREDENTIALS']
         HOUR_MINUTE = pickleData[12]['HourMinute']
         DAY_NIGHT = pickleData[12]['DayNight']
         specifiedTimeToRunAfter = pickleData[13]['_USE_RUN_AFTER_BOOLEAN']
@@ -268,7 +268,7 @@ def __log_todays_date():
     today = datetime.datetime.now().strftime('%d-%m-%Y')
 
     try:
-        saveFile = open('Last Change Date.dat', 'wb')
+        saveFile = open('./assets/data/Last Change Date.dat', 'wb')
 
         cPickle.dump(today, saveFile)
 
@@ -282,10 +282,15 @@ def __log_todays_date():
         return False
 
 def __has_changed_today():
+
+    if environment == 'development':
+        LOGGER.debug('no need to check if we changed the password today')
+        return False
+
     import os
     today = datetime.datetime.now().strftime('%d-%m-%Y')
 
-    FILEPATH = './Last Change Date.dat'
+    FILEPATH = './assets/data/Last Change Date.dat'
 
     if not os.path.isfile(FILEPATH):
         f = open(FILEPATH, 'w+')
@@ -360,7 +365,7 @@ def TTCL_HostNav():
     options = Options()
     options.headless = True
 
-    driver = webdriver.Chrome(executable_path='./assets/images/chromedriver.exe',chrome_options=options)
+    driver = webdriver.Chrome(executable_path='./assets/chromedriver.exe',chrome_options=options)
     
     driver.get(HOST_ADDRESS)
 
@@ -433,15 +438,15 @@ def __open_settings(systray):
 
 def state_manage_trayIcon(systrayObj, navFunction):
     try:
-        systrayObj.update(hover_text="Running... WPR", icon="icon-green.ico")
+        systrayObj.update(hover_text="Running... WPR", icon="./assets/images/icon-green.ico")
         navFunction()
-        systrayObj.update(icon="icon-normal.ico")
+        systrayObj.update(icon="./assets/images/icon-normal.ico")
         LOGGER.debug('waiting for %s seconds before closing...' % (timeToClose,))
         for i in range(timeToClose):
             systrayObj.update(hover_text="Completed the run, exiting in %s seconds" % (timeToClose - (i+1),))
             time.sleep(1)
     except Exception as err:
-        systrayObj.update(hover_text="Failed to run", icon="icon-yellow.ico")
+        systrayObj.update(hover_text="Failed to run", icon="./assets/images/icon-yellow.ico")
         LOGGER.debug(err)
         LOGGER.debug('something went wrong! while running TTCL Host Navigator')
         for i in range(timeToClose):
@@ -473,7 +478,7 @@ def run():
         return
 
     menu_options = (("Settings", None, __open_settings),)
-    systray = SysTrayIcon("icon-normal.ico", "Wifi password rotater", menu_options)
+    systray = SysTrayIcon("./assets/images/icon-normal.ico", "Wifi password rotater", menu_options)
     systray.start()
     LOGGER.debug('System tray icon has been started')
 
@@ -484,7 +489,7 @@ def run():
     else:
         LOGGER.debug('carrier is not supported, exiting')
         
-        systray.update(hover_text="This Carrier is not supported yet!", icon="icon-yellow.ico")
+        systray.update(hover_text="This Carrier is not supported yet!", icon="./assets/images/icon-yellow.ico")
 
         for i in range(timeToClose):
             systray.update(hover_text="Failed the run, exiting in %s seconds" % (timeToClose - (i+1),))

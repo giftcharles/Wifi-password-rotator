@@ -54,7 +54,7 @@ class MyDialog(wx.Dialog):
     def __do_layout(self):
         # begin wxGlade: MyDialog.__do_layout
         sizer_8 = wx.BoxSizer(wx.VERTICAL)
-        bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("icon-normal.png", wx.BITMAP_TYPE_ANY))
+        bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./assets/images/icon-normal.png", wx.BITMAP_TYPE_ANY))
         sizer_8.Add(bitmap_1, 0, wx.ALIGN_CENTER | wx.BOTTOM | wx.TOP, 12)
         label_3 = wx.StaticText(self, wx.ID_ANY, "Hii Application imetegenezwa na _______.\nv0.1\nKwa mawasiliano piga 0629495961", style=wx.ALIGN_CENTER)
         sizer_8.Add(label_3, 0, wx.ALIGN_CENTER, 0)
@@ -119,8 +119,8 @@ class MyFrame(wx.Frame):
         # Tool Bar
         self.frame_toolbar = wx.ToolBar(self, -1)
         self.SetToolBar(self.frame_toolbar)
-        self.frame_toolbar.AddTool(wx.ID_SAVE, "Save", wx.Bitmap("save-32.png", wx.BITMAP_TYPE_ANY), wx.Bitmap("save-32.png", wx.BITMAP_TYPE_ANY), wx.ITEM_NORMAL, "Save the current settings", "")
-        self.frame_toolbar.AddTool(1324, "Run", wx.Bitmap("start-green-play-icon-1.png", wx.BITMAP_TYPE_ANY), wx.Bitmap("start-green-play-icon-1.png", wx.BITMAP_TYPE_ANY), wx.ITEM_NORMAL, "Run the wifi rotater prrogram", "")
+        self.frame_toolbar.AddTool(wx.ID_SAVE, "Save", wx.Bitmap("./assets/images/save-32.png", wx.BITMAP_TYPE_ANY), wx.Bitmap("./assets/images/save-32.png", wx.BITMAP_TYPE_ANY), wx.ITEM_NORMAL, "Save the current settings", "")
+        self.frame_toolbar.AddTool(1324, "Run", wx.Bitmap("./assets/images/start-green-play-icon-1.png", wx.BITMAP_TYPE_ANY), wx.Bitmap("./assets/images/start-green-play-icon-1.png", wx.BITMAP_TYPE_ANY), wx.ITEM_NORMAL, "Run the wifi rotater prrogram", "")
         # self.frame_toolbar.AddTool(7685, "Stop", wx.Bitmap("iconfinder_lowercase_letter_x_red_3052270.png", wx.BITMAP_TYPE_ANY), wx.Bitmap("iconfinder_lowercase_letter_x_red_3052270.png", wx.BITMAP_TYPE_ANY), wx.ITEM_NORMAL, "Stop Wifi Rotater Execution", "")
         self.frame_toolbar.AddSeparator()
         self.frame_toolbar.AddTool(wx.ID_ABOUT, "About", wx.ArtProvider.GetBitmap(wx.ART_TIP, wx.ART_OTHER, (32, 32)), wx.ArtProvider.GetBitmap(wx.ART_TIP, wx.ART_OTHER, (32, 32)), wx.ITEM_NORMAL, "show the about dialogue", "")
@@ -168,7 +168,7 @@ class MyFrame(wx.Frame):
         # begin wxGlade: MyFrame.__set_properties
         self.SetTitle("Settings - Wifi Password Rotater")
         _icon = wx.NullIcon
-        _icon.CopyFromBitmap(wx.Bitmap("icon-cog.png", wx.BITMAP_TYPE_ANY))
+        _icon.CopyFromBitmap(wx.Bitmap("./assets/images/icon-cog.png", wx.BITMAP_TYPE_ANY))
         self.SetIcon(_icon)
         self.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE))
         self.frame_statusbar.SetStatusWidths([-1])
@@ -284,7 +284,7 @@ class MyFrame(wx.Frame):
     import _pickle as cPickle
     # import os
     import subprocess
-    thePickledObjectsFile = './Profile_settings.pkl'
+    thePickledObjectsFile = './assets/data/Profile_settings.pkl'
 
     def __load_pickled_data(self):
         try:
