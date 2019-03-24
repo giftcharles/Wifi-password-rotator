@@ -245,7 +245,6 @@ def __connect_to_WIFI_connection_new_pass(NewPassword):
     iface.remove_all_network_profiles()
     tmp_profile = iface.add_network_profile(profile)
 
-    iface.connect(tmp_profile)
     try:
         assert iface.status() == const.IFACE_CONNECTED
     except Exception as e:
