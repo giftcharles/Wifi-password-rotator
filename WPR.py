@@ -2,6 +2,7 @@
 
 
 import secrets
+import os
 import time
 import smtplib
 import selenium
@@ -43,16 +44,21 @@ def __setVariables():
     global timeToClose 
     global environment
     global specifiedTimeToRunAfter
+    global __APPPATH__
+
+    __APPPATH__ = os.getcwd() + '\\'
+
+    print(__APPPATH__)
 
     environment = 'production'
 
     if environment == 'production':
-        timeToClose = 60
+        timeToClose = 30
     elif environment == 'development':
         timeToClose = 5
 
     # file logging configurations
-    LOG_FILENAME = './log/logs.log'
+    LOG_FILENAME = __APPPATH__ + 'log/logs.log'
 
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
@@ -74,7 +80,7 @@ def __setVariables():
 
 
     try:
-        PIK = './assets/data/Profile_settings.pkl'
+        PIK = __APPPATH__ + 'assets/data/Profile_settings.pkl'
 
         with open(PIK, "rb") as f: 
             pickleData =  cPickle.load(f)
@@ -100,7 +106,7 @@ def __setVariables():
         HOST_ADDRESS = pickleData[8]['HOST_ADDRESS']
         HOST_USERNAME = pickleData[9]['HOST_USERNAME']
         HOST_PASSWORD = pickleData[10]['HOST_PASSWORD']
-        SERVICE_ACCOUNT_CREDENTIALS = './assets/data/' + pickleData[11]['SERVICE_ACCOUNT_CREDENTIALS']
+        SERVICE_ACCOUNT_CREDENTIALS = __APPPATH__ + 'assets/data/' + pickleData[11]['SERVICE_ACCOUNT_CREDENTIALS']
         HOUR_MINUTE = pickleData[12]['HourMinute']
         DAY_NIGHT = pickleData[12]['DayNight']
         specifiedTimeToRunAfter = pickleData[13]['_USE_RUN_AFTER_BOOLEAN']
@@ -268,7 +274,7 @@ def __log_todays_date():
     today = datetime.datetime.now().strftime('%d-%m-%Y')
 
     try:
-        saveFile = open('./assets/data/Last Change Date.dat', 'wb')
+        saveFile = open(__APPPATH__ + 'assets/data/Last Change Date.dat', 'wb')
 
         cPickle.dump(today, saveFile)
 
@@ -290,7 +296,7 @@ def __has_changed_today():
     import os
     today = datetime.datetime.now().strftime('%d-%m-%Y')
 
-    FILEPATH = './assets/data/Last Change Date.dat'
+    FILEPATH = __APPPATH__ + 'assets/data/Last Change Date.dat'
 
     if not os.path.isfile(FILEPATH):
         f = open(FILEPATH, 'w+')
@@ -365,7 +371,7 @@ def TTCL_HostNav():
     options = Options()
     options.headless = True
 
-    driver = webdriver.Chrome(executable_path='./assets/chromedriver.exe',chrome_options=options)
+    driver = webdriver.Chrome(executable_path=__APPPATH__ + 'assets/chromedriver.exe',chrome_options=options)
     
     driver.get(HOST_ADDRESS)
 
@@ -430,7 +436,7 @@ def __open_settings(systray):
     try:
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-        subprocess.Popen("settings.exe", startupinfo=startupinfo)    
+        subprocess.Popen(__APPPATH__ + "settings.exe", startupinfo=startupinfo)    
         LOGGER.debug('settings.exe Opened')
     except Exception as e:
         LOGGER.debug('could not open "settings.exe"')
@@ -438,15 +444,15 @@ def __open_settings(systray):
 
 def state_manage_trayIcon(systrayObj, navFunction):
     try:
-        systrayObj.update(hover_text="Running... WPR", icon="./assets/images/icon-green.ico")
+        systrayObj.update(hover_text="Running... WPR", icon=__APPPATH__ + "assets/images/icon-green.ico")
         navFunction()
-        systrayObj.update(icon="./assets/images/icon-normal.ico")
+        systrayObj.update(icon=__APPPATH__ + "assets/images/icon-normal.ico")
         LOGGER.debug('waiting for %s seconds before closing...' % (timeToClose,))
         for i in range(timeToClose):
             systrayObj.update(hover_text="Completed the run, exiting in %s seconds" % (timeToClose - (i+1),))
             time.sleep(1)
     except Exception as err:
-        systrayObj.update(hover_text="Failed to run", icon="./assets/images/icon-yellow.ico")
+        systrayObj.update(hover_text="Failed to run", icon=__APPPATH__ + "assets/images/icon-yellow.ico")
         LOGGER.debug(err)
         LOGGER.debug('something went wrong! while running TTCL Host Navigator')
         for i in range(timeToClose):
@@ -455,9 +461,6 @@ def state_manage_trayIcon(systrayObj, navFunction):
 
 def __end_log_runtime():
     LOGGER.debug('#### %s: WPR LOGS END' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),) )
-    
-def quitSystem():
-    raise SystemExit
 
 def run():
 
@@ -480,7 +483,7 @@ def run():
         return
 
     menu_options = (("Settings", None, __open_settings),)
-    systray = SysTrayIcon("./assets/images/icon-normal.ico", "Wifi password rotater", menu_options, on_quit=quitSystem)
+    systray = SysTrayIcon(__APPPATH__ + "assets/images/icon-normal.ico", "Wifi password rotater", menu_options)
     systray.start()
     LOGGER.debug('System tray icon has been started')
 
@@ -491,7 +494,7 @@ def run():
     else:
         LOGGER.debug('carrier is not supported, exiting')
         
-        systray.update(hover_text="This Carrier is not supported yet!", icon="./assets/images/icon-yellow.ico")
+        systray.update(hover_text="This Carrier is not supported yet!", icon=__APPPATH__ + "assets/images/icon-yellow.ico")
 
         for i in range(timeToClose):
             systray.update(hover_text="Failed the run, exiting in %s seconds" % (timeToClose - (i+1),))
