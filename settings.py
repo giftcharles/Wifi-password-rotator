@@ -65,7 +65,7 @@ class MyDialog(wx.Dialog):
 
 class MyFrame(wx.Frame):
     def __init__(self, *args, **kwds):
-        LOGGER.debug('#### %s: WPR LOGS START' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),) )
+        LOGGER.debug('#### %s: WPR SETTINGS START' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),) )
 
         # variables 
         self.Carriers = ["Vodacom", "Airtel", "Zantel", "TTCL", "Tigo", "Halotel"]
@@ -383,7 +383,7 @@ class MyApp(wx.App):
 
     def OnExit(self):
         LOGGER.debug('closing the application')
-        LOGGER.debug('#### %s: WPR LOGS END' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),) )
+        LOGGER.debug('#### %s: WPR SETTINGS END' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),) )
         return True
 
 # end of class MyApp
