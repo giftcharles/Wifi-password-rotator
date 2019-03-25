@@ -1,6 +1,3 @@
-# C:/Users/gift/AppData/Local/Programs/Python/Python36-32x86/python.exe setup.py build
-
-
 import secrets
 import os
 import time
@@ -45,6 +42,7 @@ def __setVariables():
     global environment
     global specifiedTimeToRunAfter
     global __APPPATH__
+    global NewPasswordAndTime
 
     __APPPATH__ = os.getcwd() + '\\'
 
@@ -113,7 +111,8 @@ def __setVariables():
 
         LOGGER.debug('Global variables have been set')
 
- 
+        NewPasswordAndTime = __GeneratePassword()
+
 def __get_checked_in_customer_emails():
     scope = ['https://spreadsheets.google.com/feeds',
             'https://www.googleapis.com/auth/drive']
@@ -206,6 +205,24 @@ def send_password_via_email(genPassAndTime):
         time.sleep(5)
         LOGGER.debug('retrying...')
         return send_password_via_email(genPassAndTime)
+
+def __save_password_to_desktop_txt(TheNewPassword):
+    try:
+        DesktopPathtTxt = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop\\') + 'WIFI-password.txt'
+    
+        f = open(DesktopPathtTxt, 'w+')
+
+        f.write(TheNewPassword)
+
+        f.close()
+
+        LOGGER.debug('Password saved in %s' % (DesktopPathtTxt,))
+
+    except Exception as e:
+        LOGGER.debug('Could not save the password to the desktop')
+        LOGGER.debug(e)
+
+
 
 def __Email_guests_password_didnt_change(emailsList, FailedPassword):
     sent_from = _GMAIL_USER  
@@ -362,8 +379,6 @@ def __Connected_to_router():
 
 def TTCL_HostNav():
     
-    NewPasswordAndTime = __GeneratePassword()
-
     emails = send_password_via_email(NewPasswordAndTime)
     LOGGER.debug('waiting for like %s seconds for Emails to be delivered' % (WaitAfterEmail,))
     time.sleep(WaitAfterEmail)
@@ -446,6 +461,7 @@ def state_manage_trayIcon(systrayObj, navFunction):
     try:
         systrayObj.update(hover_text="Running... WPR", icon=__APPPATH__ + "assets/images/icon-green.ico")
         navFunction()
+        __save_password_to_desktop_txt(NewPasswordAndTime[0])
         systrayObj.update(icon=__APPPATH__ + "assets/images/icon-normal.ico")
         LOGGER.debug('waiting for %s seconds before closing...' % (timeToClose,))
         for i in range(timeToClose):
